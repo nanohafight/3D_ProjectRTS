@@ -27,6 +27,7 @@ public class Unit : MonoBehaviour
     {
         Debug.Log("네 움직일게요");
         navAgent.SetDestination(end);
+        //transform.LookAt(end);
     }
 
     public void Init()
