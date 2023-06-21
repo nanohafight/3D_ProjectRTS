@@ -31,6 +31,7 @@ namespace RTS_Cam
 
         #region Movement
 
+        public Transform player;
         public float keyboardMovementSpeed = 5f; //speed with keyboard movement
         public float screenEdgeMovementSpeed = 3f; //spee with screen edge movement
         public float followingSpeed = 5f; //speed when following a target
@@ -45,13 +46,13 @@ namespace RTS_Cam
         public bool autoHeight = true;
         public LayerMask groundMask = -1; //layermask of ground or other objects that affect height
 
-        public float maxHeight = 10f; //maximal height
-        public float minHeight = 15f; //minimnal height
+        public float maxHeight = 45f; //maximal height
+        public float minHeight = 20f; //minimnal height
         public float heightDampening = 5f; 
         public float keyboardZoomingSensitivity = 2f;
         public float scrollWheelZoomingSensitivity = 25f;
 
-        private float zoomPos = 0; //value in range (0, 1) used as t in Matf.Lerp
+        private float zoomPos = 1; //value in range (0, 1) used as t in Matf.Lerp
 
         #endregion
 
@@ -119,7 +120,7 @@ namespace RTS_Cam
 
         private float ScrollWheel
         {
-            get { return Input.GetAxis(zoomingAxis); }
+            get { return -Input.GetAxis(zoomingAxis); }
         }
 
         private Vector2 MouseAxis
@@ -168,6 +169,11 @@ namespace RTS_Cam
         private void Start()
         {
             m_Transform = transform;
+            SetCameraPos();
+        }
+        public void InitPlayer(Unit unit)
+        {
+            player = unit.transform;
         }
 
         private void Update()
@@ -196,8 +202,9 @@ namespace RTS_Cam
             else
                 Move();
 
-            HeightCalculation();
-            Rotation();
+            //HeightCalculation();
+            //Rotation();
+            SetHeight();
             LimitPosition();
         }
 
@@ -222,10 +229,10 @@ namespace RTS_Cam
             {
                 Vector3 desiredMove = new Vector3();
 
-                Rect leftRect = new Rect(0, 0, screenEdgeBorder, Screen.height);
-                Rect rightRect = new Rect(Screen.width - screenEdgeBorder, 0, screenEdgeBorder, Screen.height);
-                Rect upRect = new Rect(0, Screen.height - screenEdgeBorder, Screen.width, screenEdgeBorder);
-                Rect downRect = new Rect(0, 0, Screen.width, screenEdgeBorder);
+                Rect leftRect = new Rect(-1, -1, screenEdgeBorder+1, Screen.height+2);
+                Rect rightRect = new Rect(Screen.width - screenEdgeBorder, -1, screenEdgeBorder+1, Screen.height+2);
+                Rect upRect = new Rect(-1, Screen.height - screenEdgeBorder, Screen.width+2, screenEdgeBorder+1);
+                Rect downRect = new Rect(-1, -1, Screen.width+2, screenEdgeBorder+1);
 
                 desiredMove.x = leftRect.Contains(MouseInput) ? -1 : rightRect.Contains(MouseInput) ? 1 : 0;
                 desiredMove.z = upRect.Contains(MouseInput) ? 1 : downRect.Contains(MouseInput) ? -1 : 0;
@@ -249,8 +256,24 @@ namespace RTS_Cam
 
                 m_Transform.Translate(desiredMove, Space.Self);
             }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                ResetCameraPos();
+            }
         }
 
+        private void SetCameraPos()
+        {
+            Vector3 desiredMove = new Vector3(player.position.x, maxHeight, player.position.z - 6);
+            m_Transform.position = desiredMove;
+        }
+
+        private void ResetCameraPos()
+        {
+            Vector3 desiredMove = new Vector3(player.position.x, m_Transform.position.y, player.position.z - 6);
+            m_Transform.position = desiredMove;
+        }
         /// <summary>
         /// calcualte height
         /// </summary>
@@ -273,6 +296,20 @@ namespace RTS_Cam
             m_Transform.position = Vector3.Lerp(m_Transform.position, 
                 new Vector3(m_Transform.position.x, targetHeight + difference, m_Transform.position.z), Time.deltaTime * heightDampening);
         }
+        private void SetHeight()
+        {
+            if (useScrollwheelZooming)
+                zoomPos += ScrollWheel * Time.deltaTime * scrollWheelZoomingSensitivity;
+            if (useKeyboardZooming)
+                zoomPos += ZoomDirection * Time.deltaTime * keyboardZoomingSensitivity;
+
+            zoomPos = Mathf.Clamp01(zoomPos);
+
+            float targetHeight = Mathf.Lerp(minHeight, maxHeight, zoomPos);
+
+            m_Transform.position = Vector3.Lerp(m_Transform.position,
+                new Vector3(m_Transform.position.x, targetHeight, m_Transform.position.z), Time.deltaTime * heightDampening);
+        }
 
         /// <summary>
         /// rotate camera
@@ -291,7 +328,7 @@ namespace RTS_Cam
         /// </summary>
         private void FollowTarget()
         {
-            Vector3 targetPos = new Vector3(targetFollow.position.x, m_Transform.position.y, targetFollow.position.z) + targetOffset;
+            Vector3 targetPos = new Vector3(targetFollow.position.x, m_Transform.position.y, targetFollow.position.z - 100) + targetOffset;
             m_Transform.position = Vector3.MoveTowards(m_Transform.position, targetPos, Time.deltaTime * followingSpeed);
         }
 
@@ -303,9 +340,10 @@ namespace RTS_Cam
             if (!limitMap)
                 return;
                 
-            m_Transform.position = new Vector3(Mathf.Clamp(m_Transform.position.x, -limitX, limitX),
+            m_Transform.position = 
+                new Vector3(Mathf.Clamp(m_Transform.position.x, 1, limitX),
                 m_Transform.position.y,
-                Mathf.Clamp(m_Transform.position.z, -limitY, limitY));
+                Mathf.Clamp(m_Transform.position.z, 1, limitY));
         }
 
         /// <summary>

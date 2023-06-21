@@ -19,7 +19,7 @@ public class MouseClick : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButton(1))
         {
             RaycastHit hit;
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -33,12 +33,6 @@ public class MouseClick : MonoBehaviour
             {
                 Debug.Log(Input.mousePosition);
             }
-        }
-
-
-        if (Input.GetMouseButton(1))
-        {
-            Debug.DrawLine(Input.mousePosition, mainCamera.transform.forward * 100f);
         }
     }
 }
