@@ -169,7 +169,6 @@ namespace RTS_Cam
         private void Start()
         {
             m_Transform = transform;
-            SetCameraPos();
         }
         public void InitPlayer(Unit unit)
         {
