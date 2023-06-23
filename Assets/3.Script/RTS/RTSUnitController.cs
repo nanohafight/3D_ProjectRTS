@@ -17,7 +17,6 @@ public class RTSUnitController : MonoBehaviour
     }
     public void MoveUnit(Vector3 end)
     {
-        Debug.Log("RTS컨트롤러 : 움직여!");
         myUnit.MoveTo(end);
     }
 }

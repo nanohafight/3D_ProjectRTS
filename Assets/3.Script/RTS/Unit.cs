@@ -28,7 +28,6 @@ public class Unit : MonoBehaviour
 
     public void MoveTo(Vector3 end)
     {
-        Debug.Log("네 움직일게요");
         navAgent.SetDestination(end);
         //transform.LookAt(end);
     }
