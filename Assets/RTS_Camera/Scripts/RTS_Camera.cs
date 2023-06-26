@@ -362,6 +362,10 @@ namespace RTS_Cam
             targetFollow = null;
         }
 
+        public void MoveCamera(Vector3 pos)
+        {
+            transform.position = new Vector3(pos.x, transform.position.y, pos.z - 6);
+        }
         /// <summary>
         /// calculate distance to ground
         /// </summary>
