@@ -35,12 +35,15 @@ public class MouseClick : MonoBehaviour
             pointerEventData.position = Input.mousePosition;
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerEventData, results);
-            foreach (RaycastResult result in results)
+            if (results != null)
             {
-                if (result.gameObject.layer == LayerMask.NameToLayer("UI"))
+                foreach (RaycastResult result in results)
                 {
-                    isUIHit = true;
-                    break;
+                    if (result.gameObject.layer == LayerMask.NameToLayer("UI"))
+                    {
+                        isUIHit = true;
+                        break;
+                    }
                 }
             }
             if (isUIHit)
