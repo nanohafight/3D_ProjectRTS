@@ -36,7 +36,7 @@ public class MinimapController : MonoBehaviour, IPointerClickHandler
 
     private void Move(Vector3 pos)
     {
-        controller.MoveUnit(pos);
+        controller.myUnit.AddCommand(new MoveCommand(controller.myUnit, pos));
     }
     private void CameraMove(Vector3 pos)
     {
