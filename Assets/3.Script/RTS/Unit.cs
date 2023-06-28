@@ -56,20 +56,6 @@ public class Unit : MonoBehaviour
         //이동커맨드
         navAgent.SetDestination(end);
     }
-    public void Attack(Unit target)
-    {
-        //todo 공격커맨드
-        Debug.Log($"{this.name}이 {target.name}을 공격");
-    }
-    public void AttackMove(Vector3 pos)
-    {
-        //todo 공격무브 커맨드
-        Debug.Log($"{this.name}이 {pos}까지 이동하며 적을 공격합니다");
-    }
-    //========================
-
-
-
 
     public void Init_myUnit()
     {

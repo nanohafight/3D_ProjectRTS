@@ -22,8 +22,8 @@ public class InputManager : MonoBehaviour
     }
     private void Update()
     {
-        OnMouseClickMove();
-        OnMouseClickTargetting();
+        OnMouseClickMove(); //우클릭
+        OnMouseClickTargetting(); //좌클릭
     }
 
     #region UpdateMethod
@@ -47,7 +47,7 @@ public class InputManager : MonoBehaviour
             }
         }
         return isUIHit;
-    }
+    } //클릭 위치가 UI 위인지 확인
     public void OnMouseClickMove()
     {
         if (Input.GetMouseButton(1))
@@ -89,5 +89,6 @@ public class InputManager : MonoBehaviour
         }
         else controller.targetUnit = null;
     }
+
     #endregion
 }

@@ -32,7 +32,6 @@ public class AttackCommand : ICommand
     }
     public void Execute()
     {
-        unit.Attack(target);
     }
 }
 
@@ -47,6 +46,5 @@ public class AttackMoveCommand : ICommand
     }
     public void Execute()
     {
-        unit.AttackMove(pos);
     }
 }
