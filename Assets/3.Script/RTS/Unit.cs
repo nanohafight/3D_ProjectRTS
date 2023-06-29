@@ -23,6 +23,7 @@ public class Unit : MonoBehaviour
     public float moveSpeed;
     public int level;
     public string champName;
+    public bool myUnit = false;
     //
     Unit Target { get { return controller.targetUnit; } }
 
@@ -59,6 +60,7 @@ public class Unit : MonoBehaviour
 
     public void Init_myUnit()
     {
+        myUnit = true;
         controller.InitMyUnit(this);
         cam.InitPlayer(this);
     }

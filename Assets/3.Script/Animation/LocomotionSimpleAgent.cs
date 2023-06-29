@@ -8,8 +8,7 @@ public class LocomotionSimpleAgent : MonoBehaviour
 {
     Animator anim;
     NavMeshAgent agent;
-    Vector2 smoothDeltaPosition = Vector2.zero;
-    Vector2 velocity = Vector2.zero;
+    float motionSmoothTime = .1f;
 
     void Start()
     {
@@ -22,26 +21,29 @@ public class LocomotionSimpleAgent : MonoBehaviour
 
     void Update()
     {
-        Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
+        float speed = agent.velocity.magnitude / agent.speed;
+        anim.SetFloat("vel", speed, motionSmoothTime, Time.deltaTime);
 
-        // Map 'worldDeltaPosition' to local space
-        float dx = Vector3.Dot(transform.right, worldDeltaPosition);
-        float dy = Vector3.Dot(transform.forward, worldDeltaPosition);
-        Vector2 deltaPosition = new Vector2(dx, dy);
+        //Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
 
-        // Low-pass filter the deltaMove
-        float smooth = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
-        smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, deltaPosition, smooth);
+        //// Map 'worldDeltaPosition' to local space
+        //float dx = Vector3.Dot(transform.right, worldDeltaPosition);
+        //float dy = Vector3.Dot(transform.forward, worldDeltaPosition);
+        //Vector2 deltaPosition = new Vector2(dx, dy);
 
-        // Update velocity if time advances
-        if (Time.deltaTime > 1e-5f)
-            velocity = smoothDeltaPosition / Time.deltaTime;
+        //// Low-pass filter the deltaMove
+        //float smooth = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
+        //smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, deltaPosition, smooth);
 
-        bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > agent.radius;
+        //// Update velocity if time advances
+        //if (Time.deltaTime > 1e-5f)
+        //    velocity = smoothDeltaPosition / Time.deltaTime;
 
-        // Update animation parameters
-        anim.SetBool("move", shouldMove);
-        anim.SetFloat("vel", velocity.magnitude);
+        //bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > agent.radius;
+
+        //// Update animation parameters
+        //anim.SetBool("move", shouldMove);
+        //anim.SetFloat("vel", velocity.magnitude);
     }
 
     void OnAnimatorMove()

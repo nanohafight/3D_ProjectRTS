@@ -85,10 +85,11 @@ public class InputManager : MonoBehaviour
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerUnit))
         {
-            controller.targetUnit = hit.transform.GetComponent<Unit>();
+            if (!hit.transform.GetComponent<Unit>().myUnit)
+            { controller.targetUnit = hit.transform.GetComponent<Unit>(); }
+            else controller.targetUnit = null;
         }
         else controller.targetUnit = null;
     }
-
     #endregion
 }

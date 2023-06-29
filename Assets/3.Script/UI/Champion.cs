@@ -15,6 +15,11 @@ public class Champion : ScriptableObject
     public float maxHp;
     public float maxMp;
     public float moveSpeed;
+    [Header("기본 공격")]
     public float atk;
     public float atkRange;
+    public virtual void Attack()
+    {
+
+    }
 }
