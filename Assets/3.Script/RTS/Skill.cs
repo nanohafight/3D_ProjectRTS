@@ -1,40 +1,31 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public enum SkillType
-{
-    Instant,
-    Targeted,
-    NonTargeted
-}
 public class Skill : ScriptableObject
 {
-    public string skillName;
-    public string animation_ID;
-    public SkillType skillType;
-    public float range;
-    public struct Indicator
+    public new string name;
+    public float cooldownTime;
+    public float activeTime;
+    public float[] dmg;
+    public Sprite icon;
+    public enum Type { instant, target, none_target}
+    public Type type;
+    public virtual void Execute(GameObject player)
     {
-        public enum Type { TARGET, MISSILE, AOE };
-        public float radius;
-        public Vector2 square;
+
     }
-    public float cooldown;
-    public double mana;    
-    public Sprite skillUI;
-
-
-    public virtual void Execute(Unit unit)
+    public virtual void Execute(GameObject player, Unit target)
     {
-        // 스킬 실행 로직
-    }
 
-    public virtual void Execute(Unit unit, Unit target)
-    {
-        // 타게팅 스킬 실행 로직
     }
+    public virtual void Execute(GameObject player, Vector3 targetpos)
+    {
 
-    public virtual void Execute(Unit unit, Vector3 targetpos)
-    {
-        //논타게팅 스킬 로직
     }
+}
+
+public class ArcherSkill : Skill
+{
+
 }

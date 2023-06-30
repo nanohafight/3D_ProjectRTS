@@ -12,6 +12,7 @@ public class Unit : MonoBehaviour
     [Header("자동세팅 컴포넌트")]
     [SerializeField] GameObject marker;
     [SerializeField] NavMeshAgent navAgent;
+    [SerializeField] Animator anim;
     //
     [Header("데이터 받기")]
     [SerializeField] Champion unitData;
@@ -43,20 +44,39 @@ public class Unit : MonoBehaviour
         if (commandQueue.Count > 0) commandQueue.Dequeue().Execute();
     }
 
+
+
+
+
+
+
+
     public void AddCommand(ICommand command)
     {
         commandQueue.Enqueue(command);
     }
-
-
-
-
     // 커맨드에서 호출할 메소드
     public void MoveTo(Vector3 end)
     {
         //이동커맨드
         navAgent.SetDestination(end);
     }
+    public void Stop()
+    {
+        navAgent.SetDestination(transform.position);
+        anim.Play("Idle", -1, 0f);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public void Init_myUnit()
     {
