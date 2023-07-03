@@ -40,7 +40,6 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        //todo 나중에 스테이트패턴으로 해줘요
         if (commandQueue.Count > 0) commandQueue.Dequeue().Execute();
     }
 

@@ -48,3 +48,16 @@ public class AttackMoveCommand : ICommand
     {
     }
 }
+
+public class SkillCommand : ICommand
+{
+    private Skill skill;
+    public SkillCommand(Skill skill)
+    {
+        this.skill = skill;
+    }
+    public void Execute()
+    {
+        skill.Execute();
+    }
+}
