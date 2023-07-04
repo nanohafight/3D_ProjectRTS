@@ -29,8 +29,6 @@ public class SelectManager : MonoBehaviour
     }
     #endregion
 
-
-
     [SerializeField] Champion selected_champ;
 
     [Header("UI세팅해줘")]
@@ -40,6 +38,21 @@ public class SelectManager : MonoBehaviour
     [Header("필요자료_스폰지점")]
     [SerializeField] Transform[] spawnPoint;
 
+
+
+    private void Update()
+    {
+
+    }
+
+
+
+
+
+
+
+
+
     public void ChangeChamp(Champion champ)
     {
         selected_champ = champ;
@@ -47,8 +60,7 @@ public class SelectManager : MonoBehaviour
     }
     public void StartBtn()
     {
-        GameObject obj = Instantiate(selected_champ.prefab, spawnPoint[Random.Range(0, spawnPoint.Length - 1)].position, Quaternion.identity);
-        obj.GetComponent<Unit>().Init_myUnit();
+        GameManager.Instance.GameStart();
         gameObject.SetActive(false);
     }
 }
