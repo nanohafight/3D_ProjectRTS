@@ -144,7 +144,7 @@ public class GameManager : Photon.MonoBehaviour
         //todo 리스폰 알고리즘 짜야함. 여기서 플레이어를 리스폰 시키거나, 플레이어 리스폰 이벤트에 이 메소드를 추가해야 함
         GameObject player = PhotonNetwork.Instantiate(champ.name, shuffledSpawnPoints[spawnCount].transform.position, Quaternion.identity, 0);
         spawnCount++;
-        player.GetComponent<Unit>().Init_myUnit();
+        player.GetComponent<Unit>().Init_myUnit(team);
         if (spawnCount >= shuffleTimes)
         {
             ShuffleSpawnPoints();
@@ -156,7 +156,7 @@ public class GameManager : Photon.MonoBehaviour
     {        
         GameObject obj = Instantiate(selected.prefab, shuffledSpawnPoints[spawnCount].transform.position, Quaternion.identity);
         spawnCount++;
-        obj.GetComponent<Unit>().Init_myUnit();
+        obj.GetComponent<Unit>().Init_myUnit(0);
     }
 
     #region ButtonEvent(MakeDummy, AllDelete)

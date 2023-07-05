@@ -9,10 +9,11 @@ public class Unit : MonoBehaviour
 {
     RTSUnitController controller;
     RTS_Camera cam;
+    int team = 0; // 0 = blue, 1 = red;
     [Header("자동세팅 컴포넌트")]
     [SerializeField] GameObject marker;
     [SerializeField] NavMeshAgent navAgent;
-    [SerializeField] Animator anim;
+    [SerializeField] public Animator anim;
     //
     [Header("데이터 받기")]
     [SerializeField] Champion unitData;
@@ -24,37 +25,61 @@ public class Unit : MonoBehaviour
     public float moveSpeed;
     public int level;
     public string champName;
+    public float attackSpeed;
     public bool myUnit = false;
     //
     Unit Target { get { return controller.targetUnit; } }
 
     [SerializeField] Queue<ICommand> commandQueue = new Queue<ICommand>();
+    [SerializeField] IState cur_state;
+    [Space]
+    [Header("Unit Controller")]
+    UnitAttack attack;
+
+
+
 
 
     private void Awake()
     {
         controller = FindObjectOfType<RTSUnitController>();
         cam = FindObjectOfType<RTS_Camera>();
+        attack = GetComponent<UnitAttack>();
+    }   
+    private void Start()
+    {
         Init_status();
     }
-
     private void Update()
     {
-        if (commandQueue.Count > 0) commandQueue.Dequeue().Execute();
+        cur_state.Update();
     }
-
-
-
-
-
-
-
-
-    public void AddCommand(ICommand command)
+    private void FixedUpdate()
     {
-        commandQueue.Enqueue(command);
+        cur_state.FixedUpdate();
     }
-    // 커맨드에서 호출할 메소드
+    private void LateUpdate()
+    {
+        cur_state.LateUpdate();
+    }
+    public void SetState(IState state)
+    {
+        cur_state.Exit();
+        cur_state = state;
+        cur_state.Enter();
+    }  
+
+
+
+
+
+
+
+
+    public int GetTeam()
+    {
+        return team;
+    }
     public void MoveTo(Vector3 end)
     {
         //이동커맨드
@@ -66,18 +91,7 @@ public class Unit : MonoBehaviour
         anim.Play("Idle", -1, 0f);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public void Init_myUnit()
+    public void Init_myUnit(int team)
     {
         myUnit = true;
         controller.InitMyUnit(this);
@@ -93,6 +107,7 @@ public class Unit : MonoBehaviour
         moveSpeed = unitData.moveSpeed;
         level = 1;
         champName = unitData.champName;
+        attack.Init(this, anim);
     }
 
 
